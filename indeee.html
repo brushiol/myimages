@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image OCR</title>
+</head>
+<body>
+    <h1>Image OCR</h1>
+    <form enctype="multipart/form-data" method="post" action="#" id="uploadForm">
+        <input type="file" name="image" id="imageInput" accept="image/*" required>
+        <button type="button" onclick="uploadImage()">Upload Image</button>
+    </form>
+
+    <div id="result">
+        <!-- OCR results will be displayed here -->
+    </div>
+
+    <script>
+        async function uploadImage() {
+            const formData = new FormData(document.getElementById('uploadForm'));
+            try {
+                const response = await fetch('K87583906388957', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer K87583906388957'
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`OCR API request failed with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Display OCR results
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        }
+
+        function displayResults(data) {
+            const resultContainer = document.getElementById('result');
+            resultContainer.innerHTML = '';
+
+            if (data && data.text) {
+                const textParagraph = document.createElement('p');
+                textParagraph.textContent = `Text found in the image: ${data.text}`;
+                resultContainer.appendChild(textParagraph);
+            } else {
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = 'No text found in the image.';
+                resultContainer.appendChild(errorParagraph);
+            }
+        }
+    </script>
+</body>
+</html>
